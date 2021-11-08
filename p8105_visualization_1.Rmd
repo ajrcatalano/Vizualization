@@ -76,3 +76,143 @@ weather_plot =
 weather_plot + geom_point()
 ```
 
+## Advanced scatterplots
+
+```{r}
+# adding color and smooth trend lines
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+What about `aes` placement?
+
+```{r}
+# note that placing the color aes within `geom_point` places a single smooth trend line through the scatterplot. R is reading the color aes within the whole scatterplot
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name)) + 
+  geom_smooth(se = FALSE)
+```
+
+## Faceting
+
+```{r}
+# `facet_grid` first argument = row definition second argument = column definition
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.2, size = 0.3) + 
+  geom_smooth(se = FALSE, size = 2) +
+  facet_grid(. ~ name)
+
+# below alpha = tmin specifies a color gradient mapped to variable tmin
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, alpha = tmin, color = name)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  facet_grid(name ~ .)
+```
+
+Combining elements:
+
+```{r}
+# size of points is mapped to precipitation amount
+
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.3) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ name) +
+  theme_classic()
+```
+
+How many geoms must exist?
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_smooth(se = FALSE)
+```
+
+Neat geoms exist!
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_hex()
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_density_2d() +
+  geom_point(alpha = 0.3)
+```
+
+## Univariate plots
+
+Histograms
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin)) +
+  geom_histogram()
+```
+
+Adding color and stuff (can be weird):
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram(position = "dodge")
+
+# using facets can make multiple levels easier to see
+
+weather_df %>% 
+  ggplot(aes(x = tmin)) +
+  geom_histogram() +
+  facet_grid(. ~ name)
+```
+
+A new geometry (density = smoothed histogram, loses outliers - adjust with `adjust`):
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = 0.3, adjust = 0.5)
+```
+
+## Box plots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin)) +
+  geom_boxplot()
+```
+
+## Trendy plots
+
+Violin plots:
+
+```{r}
+# turning your head sideways lets you see densities (makes skewed data more obvious than box plots)
+
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin, fill = name)) + 
+  geom_violin(alpha = 0.5) +
+  stat_summary(fun = median)
+```
+
+Ridge plots (good for many categories e.g. age distribution by US state):
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = name)) +
+  geom_density_ridges()
+```
+
+## Saving and embeding plots
+
