@@ -1,0 +1,50 @@
+---
+title: "Data Visualization"
+author: "AJ Catalano"
+date: "11/7/2021"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(ggridges)
+```
+
+Exploratory analysis may include:
+
+* visualization
+* checks for data completeness and reliablity
+* quantification of centrality and variabilty
+* initial evaluation of hypotheses
+* hypothesis generation
+
+**Basic graph components:**
+
+* data
+* aesthetic mapping - what variables map to what features of the graph (e.g. axes, point size, colors)
+* geom - visual representaion of data (type of plot)
+
+**Advanced graph components:**
+
+* facets - multiple panels
+* scales
+* statistics
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
