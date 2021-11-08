@@ -82,3 +82,45 @@ weather_df =
     ## date created (size, mb): 2021-11-08 08:56:29 (0.916)
 
     ## file min/max dates: 1999-09-01 / 2021-11-30
+
+## Scatterplots
+
+``` r
+ggplot(
+  weather_df, aes(x = tmin, y = tmax)) + 
+    geom_point()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+# different approach to same plot:
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_1_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+
+Saving and editing plot object:
+
+``` r
+# first:
+
+weather_plot =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax))
+
+# then:
+
+weather_plot + geom_point()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->

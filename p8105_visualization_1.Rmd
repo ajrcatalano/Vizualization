@@ -48,3 +48,31 @@ weather_df =
   select(name, id, everything())
 ```
 
+## Scatterplots
+
+```{r}
+ggplot(
+  weather_df, aes(x = tmin, y = tmax)) + 
+    geom_point()
+
+# different approach to same plot:
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+Saving and editing plot object:
+
+```{r}
+# first:
+
+weather_plot =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax))
+
+# then:
+
+weather_plot + geom_point()
+```
+
