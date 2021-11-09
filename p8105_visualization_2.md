@@ -1,4 +1,4 @@
-Visualization 2
+Visualization
 ================
 AJ Catalano
 11/8/2021
@@ -71,3 +71,21 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+## Adding labels
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
