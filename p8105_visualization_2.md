@@ -160,3 +160,97 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+## Themes
+
+Moving the legend:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE) + 
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+Changing overall theme:
+
+``` r
+# notice how theme(legend.position = "bottom") is ignored:
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggthemes::theme_few()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+# now it's not ignored
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE) + 
+  theme_minimal() + 
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+
+## Setting options
+
+``` r
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  fig.width = .6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.color = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
