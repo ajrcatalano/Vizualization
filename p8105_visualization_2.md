@@ -89,3 +89,74 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+## Scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  scale_x_continuous(
+    breaks = c(-15, 0, 15),
+    labels = c("-15 C", "0", "15")
+  ) +
+  scale_y_continuous(
+    trans = "log",
+    position = "right"
+  )
+```
+
+    ## Warning in self$trans$transform(x): NaNs produced
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+    ## Warning: Removed 90 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+#### Color scales
+
+``` r
+# playing with color hue and using scale_color_hue to rename key
+
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  scale_color_hue(h = c(100, 200),
+                  name = "Location")
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    title = "Temperature Plot",
+    x = "Minimum Daily Temperature",
+    y = "Maximum Daily Temperature",
+    caption = "Data from R NOAA package; temperatures in 2017"
+    ) + 
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
