@@ -19,6 +19,34 @@ library(tidyverse)
     ## x dplyr::lag()    masks stats::lag()
 
 ``` r
+knitr::opts_chunk$set(
+  fig.width = .6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.color = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+Exploratory analysis includes:
+
+-   visualization
+-   checks for data completion and reliability
+-   initial hypothesis evaluation
+-   hypothesis formation
+
+**Want numerical summaries of data, especially within groups and
+subgroups**
+
+``` r
 weather_df =  
   rnoaa::meteo_pull_monitors(
     c("USW00094728", "USC00519397", "USS0023B17S"),
