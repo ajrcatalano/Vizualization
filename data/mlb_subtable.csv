@@ -1,0 +1,31 @@
+team,runs,at_bats,hits,homeruns,bat_avg,strikeouts
+Texas Rangers,855,5659,1599,210,0.283,930
+Boston Red Sox,875,5710,1600,203,0.28,1108
+Detroit Tigers,787,5563,1540,169,0.277,1143
+Kansas City Royals,730,5672,1560,129,0.275,1006
+St. Louis Cardinals,762,5532,1513,162,0.273,978
+New York Mets,718,5600,1477,108,0.264,1085
+New York Yankees,867,5518,1452,222,0.263,1138
+Milwaukee Brewers,721,5447,1422,185,0.261,1083
+Colorado Rockies,735,5544,1429,163,0.258,1201
+Houston Astros,615,5598,1442,95,0.258,1164
+Baltimore Orioles,708,5585,1434,191,0.257,1120
+Los Angeles Dodgers,644,5436,1395,117,0.257,1087
+Chicago Cubs,654,5549,1423,148,0.256,1202
+Cincinnati Reds,735,5612,1438,183,0.256,1250
+Los Angeles Angels,667,5513,1394,155,0.253,1086
+Philadelphia Phillies,713,5579,1409,153,0.253,1024
+Chicago White Sox,654,5502,1387,154,0.252,989
+Cleveland Indians,704,5509,1380,154,0.25,1269
+Arizona Diamondbacks,731,5421,1357,172,0.25,1249
+Toronto Blue Jays,743,5559,1384,186,0.249,1184
+Minnesota Twins,619,5487,1357,103,0.247,1048
+Florida Marlins,625,5508,1358,149,0.247,1244
+Pittsburgh Pirates,610,5421,1325,107,0.244,1308
+Oakland Athletics,645,5452,1330,114,0.244,1094
+Tampa Bay Rays,707,5436,1324,172,0.244,1193
+Atlanta Braves,641,5528,1345,173,0.243,1260
+Washington Nationals,624,5441,1319,154,0.242,1323
+San Francisco Giants,570,5486,1327,121,0.242,1122
+San Diego Padres,593,5417,1284,91,0.237,1320
+Seattle Mariners,556,5421,1263,109,0.233,1280
