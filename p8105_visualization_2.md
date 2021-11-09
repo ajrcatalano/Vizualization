@@ -276,3 +276,117 @@ ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+## `patchwork`
+
+Faceting:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5) + 
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_density).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+Patchwork - multi-panel plots when faceting isn’t feasible:
+
+``` r
+tmax_tmin_p = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+prcp_dens_p = 
+  weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5) +
+  theme(legend.position = "none")
+
+tmax_date_p = 
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "none")
+
+# not working like in lesson - revisit
+patchwork::wrap_plots(tmax_date_p, prcp_dens_p)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+## Data manipulation
+
+Controlling factors:
+
+``` r
+# fill = name is converting character variables into factors and arranging in alphabetical order
+
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = .5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+# fixing it by manipulating data
+
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))
+    ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = .5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+How to get densities for tmin and tmax in a single panel:
+
+``` r
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = .5)
+```
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 18 rows containing non-finite values (stat_density).
+
+![](p8105_visualization_2_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->

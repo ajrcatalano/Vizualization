@@ -235,6 +235,52 @@ tmax_date_p =
   theme(legend.position = "none")
 
 # not working like in lesson - revisit
-patchwork::wrap_plots(tmax_date_p, prcp_dens_plot)
+patchwork::wrap_plots(tmax_date_p, prcp_dens_p)
+```
+
+## Data manipulation
+
+Controlling factors:
+
+```{r}
+# fill = name is converting character variables into factors and arranging in alphabetical order
+
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = .5)
+
+# fixing it by manipulating data
+
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))
+    ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = .5)
+```
+
+How to get densities for tmin and tmax in a single panel:
+
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = .5)
+
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
 ```
 
