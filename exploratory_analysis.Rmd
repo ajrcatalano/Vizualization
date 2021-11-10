@@ -53,3 +53,32 @@ weather_df =
   select(name, id, everything())
 ```
 
+## `group_by`
+
+```{r}
+# `ungroup` does what it sounds like it does
+
+weather_df %>% 
+  group_by(name, month)
+```
+
+## Counting
+
+```{r}
+# counting month observations; n() gives current group size
+
+weather_df %>% 
+  group_by(month) %>% 
+  summarize(n_obs = n())
+
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(n_obs = n())
+```
+
+`count()`
+
+```{r}
+weather_df %>% 
+  count(name, month, name = "n_obs")
+```
