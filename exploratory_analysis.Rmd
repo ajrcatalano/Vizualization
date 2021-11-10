@@ -216,3 +216,6 @@ weather_df %>%
   )
 ```
 
+## Some notes:
+
+Summarize isn't the end all be all of exploration.
