@@ -121,3 +121,98 @@ weather_df %>%
   janitor::tabyl(name, cold)
 ```
 
+## General summaries
+
+```{r}
+weather_df %>% 
+  group_by(month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  )
+```
+
+**The output of the above code is a dataframe...and can be piped into ggplot!**
+
+```{r}
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  ) %>% 
+  ggplot(aes(x = month, y = mean_tmax, color = name)) +
+  geom_point() +
+  geom_line()
+```
+
+Summarizing many columns using `across`:
+
+```{r}
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(across(prcp:tmin, mean))
+```
+
+```{r}
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(mean_tmax = mean(tmax)) %>% 
+  pivot_wider(names_from = name, values_from = mean_tmax) %>% 
+  knitr::kable(digits = 1)
+
+# knitr::kable makes tables look better when knit
+```
+
+## `group_by` and `mutate`
+
+```{r}
+# dataframe will be same size as weather_df, but will have a new mean_tmax and centered_tmax column
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    centered_tmax = tmax - mean_tmax
+  ) %>% 
+  ggplot(aes(x = date, y = centered_tmax, color = name)) +
+  geom_point()
+```
+
+## Window functions
+
+```{r}
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(
+    temp_rank = min_rank(tmax)
+  ) %>% 
+  filter(temp_rank == 1) %>%
+  view()
+
+# ranking in descending order
+
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(
+    temp_rank = min_rank(desc(tmax))
+  ) %>% 
+  view()
+```
+
+## Lag
+
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    lag_temp = lag(tmax, 5),
+    temp_change = tmax - lag(tmax)
+  ) %>% 
+  summarize(
+    temp_change_max = max(temp_change, na.rm = TRUE),
+    temp_change_sd = sd(temp_change, na.rm = TRUE)
+  )
+```
+

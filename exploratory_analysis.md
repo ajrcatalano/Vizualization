@@ -252,3 +252,167 @@ weather_df %>%
     ##            name cold not_cold
     ##  CentralPark_NY   44      321
     ##    Waterhole_WA  172      193
+
+## General summaries
+
+``` r
+weather_df %>% 
+  group_by(month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  )
+```
+
+    ## # A tibble: 12 × 4
+    ##    month      mean_tmax mean_prcp median_tmin
+    ##    <date>         <dbl>     <dbl>       <dbl>
+    ##  1 2017-01-01      10.8     37.0          1.7
+    ##  2 2017-02-01      12.2     57.9          1.7
+    ##  3 2017-03-01      13.0     54.6          1.1
+    ##  4 2017-04-01      17.3     32.9          8.9
+    ##  5 2017-05-01      19.9     28.4         11.7
+    ##  6 2017-06-01      23.5     18.7         18.9
+    ##  7 2017-07-01      25.5     12.7         20.8
+    ##  8 2017-08-01      26.3     10.2         20  
+    ##  9 2017-09-01      23.8      9.94        16.1
+    ## 10 2017-10-01      20.1     41.5         12.8
+    ## 11 2017-11-01      14.0     61.5          3.9
+    ## 12 2017-12-01      11.0     40.2          1.6
+
+**The output of the above code is a dataframe…and can be piped into
+ggplot!**
+
+``` r
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  ) %>% 
+  ggplot(aes(x = month, y = mean_tmax, color = name)) +
+  geom_point() +
+  geom_line()
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the `.groups` argument.
+
+<img src="exploratory_analysis_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
+
+Summarizing many columns using `across`:
+
+``` r
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(across(prcp:tmin, mean))
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the `.groups` argument.
+
+    ## # A tibble: 36 × 5
+    ## # Groups:   name [3]
+    ##    name           month       prcp  tmax   tmin
+    ##    <chr>          <date>     <dbl> <dbl>  <dbl>
+    ##  1 CentralPark_NY 2017-01-01  39.5  5.98  0.748
+    ##  2 CentralPark_NY 2017-02-01  22.5  9.28  1.45 
+    ##  3 CentralPark_NY 2017-03-01  43.0  8.22 -0.177
+    ##  4 CentralPark_NY 2017-04-01  32.5 18.3   9.66 
+    ##  5 CentralPark_NY 2017-05-01  52.3 20.1  12.2  
+    ##  6 CentralPark_NY 2017-06-01  40.4 26.3  18.2  
+    ##  7 CentralPark_NY 2017-07-01  34.3 28.7  21.0  
+    ##  8 CentralPark_NY 2017-08-01  27.4 27.2  19.5  
+    ##  9 CentralPark_NY 2017-09-01  17.0 25.4  17.4  
+    ## 10 CentralPark_NY 2017-10-01  34.3 21.8  13.9  
+    ## # … with 26 more rows
+
+``` r
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(mean_tmax = mean(tmax)) %>% 
+  pivot_wider(names_from = name, values_from = mean_tmax) %>% 
+  knitr::kable(digits = 1)
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the `.groups` argument.
+
+| month      | CentralPark_NY | Waikiki_HA | Waterhole_WA |
+|:-----------|---------------:|-----------:|-------------:|
+| 2017-01-01 |            6.0 |       27.8 |         -1.4 |
+| 2017-02-01 |            9.3 |       27.2 |          0.0 |
+| 2017-03-01 |            8.2 |       29.1 |          1.7 |
+| 2017-04-01 |           18.3 |       29.7 |          3.9 |
+| 2017-05-01 |           20.1 |         NA |         10.1 |
+| 2017-06-01 |           26.3 |       31.3 |         12.9 |
+| 2017-07-01 |           28.7 |         NA |         16.3 |
+| 2017-08-01 |           27.2 |       32.0 |         19.6 |
+| 2017-09-01 |           25.4 |       31.7 |         14.2 |
+| 2017-10-01 |           21.8 |       30.3 |          8.3 |
+| 2017-11-01 |           12.3 |       28.4 |          1.4 |
+| 2017-12-01 |            4.5 |       26.5 |          2.2 |
+
+``` r
+# knitr::kable makes tables look better when knit
+```
+
+## `group_by` and `mutate`
+
+``` r
+# dataframe will be same size as weather_df, but will have a new mean_tmax and centered_tmax column
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    centered_tmax = tmax - mean_tmax
+  ) %>% 
+  ggplot(aes(x = date, y = centered_tmax, color = name)) +
+  geom_point()
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="exploratory_analysis_files/figure-gfm/unnamed-chunk-13-1.png" width="90%" />
+
+## Window functions
+
+``` r
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(
+    temp_rank = min_rank(tmax)
+  ) %>% 
+  filter(temp_rank == 1) %>%
+  view()
+
+# ranking in descending order
+
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(
+    temp_rank = min_rank(desc(tmax))
+  ) %>% 
+  view()
+```
+
+## Lag
+
+``` r
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    lag_temp = lag(tmax, 5),
+    temp_change = tmax - lag(tmax)
+  ) %>% 
+  summarize(
+    temp_change_max = max(temp_change, na.rm = TRUE),
+    temp_change_sd = sd(temp_change, na.rm = TRUE)
+  )
+```
+
+    ## # A tibble: 3 × 3
+    ##   name           temp_change_max temp_change_sd
+    ##   <chr>                    <dbl>          <dbl>
+    ## 1 CentralPark_NY            12.7           4.45
+    ## 2 Waikiki_HA                 6.7           1.23
+    ## 3 Waterhole_WA               8             3.13
